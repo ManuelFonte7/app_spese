@@ -1,0 +1,7 @@
+echo "# app_spese" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/ManuelFonte7/app_spese.git
+git push -u origin main

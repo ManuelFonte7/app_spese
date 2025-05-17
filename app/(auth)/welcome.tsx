@@ -23,6 +23,10 @@ const Welcome = () => {
                         <Typography size={25} fontWeight={"800"}>Tieni sempre sotto controllo</Typography>
                         <Typography size={25} fontWeight={"800"}>le tue finanze</Typography>
                     </View>
+                    <View style={{alignItems: 'center', gap: 2}}>
+                        <Typography size={17} color={colors.textLight}>Monitora sempre le tue finanze</Typography>
+                        <Typography size={17} color={colors.textLight}>per un futuro migliore</Typography>
+                    </View>
                 </View>
             </View>
         </ScreenWrapper>
