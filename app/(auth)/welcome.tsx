@@ -1,8 +1,10 @@
+import Button from "@/components/Button";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
 import { colors, spacingX, spacingY } from "@/constants/tema";
 import { scalaVerticale } from "@/utils/stile";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 
 const Welcome = () => {
     return (
@@ -14,19 +16,25 @@ const Welcome = () => {
                         <Typography fontWeight={"500"}>Registrati</Typography>
                     </TouchableOpacity>
                     
-                    <Image source={require('../../assets/images/welcome.png')} style={styles.welcomeImage} resizeMode="contain"/>
+                    <Animated.Image entering={FadeIn.duration(1000)} source={require('../../assets/images/welcome.png')} style={styles.welcomeImage} resizeMode="contain"/>
                 </View>
 
                 {/* footer */}
                 <View style={styles.footer}>
-                    <View style={{alignItems: 'center'}}>
+                    <Animated.View entering={FadeInDown.duration(1000).springify().damping(12)} style={{alignItems: 'center'}}>
                         <Typography size={25} fontWeight={"800"}>Tieni sempre sotto controllo</Typography>
                         <Typography size={25} fontWeight={"800"}>le tue finanze</Typography>
-                    </View>
-                    <View style={{alignItems: 'center', gap: 2}}>
+                    </Animated.View>
+                    <Animated.View entering={FadeInDown.duration(1000).springify().damping(12)} style={{alignItems: 'center', gap: 2}}>
                         <Typography size={17} color={colors.textLight}>Monitora sempre le tue finanze</Typography>
                         <Typography size={17} color={colors.textLight}>per un futuro migliore</Typography>
-                    </View>
+                    </Animated.View>
+
+                    <Animated.View entering={FadeInDown.duration(1000).springify().damping(12)} style={styles.buttonContainer}>
+                        <Button>
+                            <Typography size={22} fontWeight={"600"}>Inizia ora</Typography>
+                        </Button>
+                    </Animated.View>
                 </View>
             </View>
         </ScreenWrapper>
