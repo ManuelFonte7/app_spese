@@ -3,17 +3,19 @@ import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
 import { colors, spacingX, spacingY } from "@/constants/tema";
 import { scalaVerticale } from "@/utils/stile";
+import { useRouter } from "expo-router";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 
 const Welcome = () => {
+    const router = useRouter();
     return (
         <ScreenWrapper>
             <View style={styles.container}>
                 {/* bottone di login e immagine */}
                 <View>
-                    <TouchableOpacity style={styles.loginButton}>
-                        <Typography fontWeight={"500"}>Registrati</Typography>
+                    <TouchableOpacity onPress={() => router.push('/(auth)/login')} style={styles.loginButton}>
+                        <Typography fontWeight={"500"}>Accedi</Typography>
                     </TouchableOpacity>
                     
                     <Animated.Image entering={FadeIn.duration(1000)} source={require('../../assets/images/welcome.png')} style={styles.welcomeImage} resizeMode="contain"/>
@@ -31,7 +33,7 @@ const Welcome = () => {
                     </Animated.View>
 
                     <Animated.View entering={FadeInDown.duration(1000).springify().damping(12)} style={styles.buttonContainer}>
-                        <Button>
+                        <Button onPress={() => router.push('/(auth)/register')}>
                             <Typography size={22} fontWeight={"600"}>Inizia ora</Typography>
                         </Button>
                     </Animated.View>
