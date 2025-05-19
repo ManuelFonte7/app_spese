@@ -5,17 +5,25 @@ import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
 import { colors, spacingX, spacingY } from "@/constants/tema";
 import { scalaVerticale } from "@/utils/stile";
+import { useRouter } from "expo-router";
 import * as Icons from 'phosphor-react-native';
 import React, { useRef, useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
 
 const Login = () => {
     const emailRef = useRef("");
     const passwordRef = useRef("");
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter()
 
     const handleSubmit = async () =>{
-
+        if(!emailRef.current || !passwordRef.current){
+            Alert.alert('Accesso', "Per favore, completa tutti i campi");
+            ReadableByteStreamController;
+        }
+        console.log('email: ', emailRef.current);
+        console.log('password: ', passwordRef.current);
+        console.log('Puoi procedere');
     };
 
     return(
@@ -28,7 +36,7 @@ const Login = () => {
                 </View>
 
                 <View style={styles.form}>
-                    <Typography size={16} color={colors.textLighter}>Accedi ora per tracciare le tue spese</Typography>
+                    <Typography size={16} color={colors.textLighter}>Accedi per tracciare le tue spese</Typography>
                     <Input 
                         onChangeText={value => emailRef.current = value}
                         placeholder="Inserisci la tua e-mail" 
@@ -50,8 +58,8 @@ const Login = () => {
 
                 <View style={styles.footer}>
                     <Typography size={15}>Non hai un account?</Typography>
-                    <Pressable>
-                        <Typography size={15}>Registrati</Typography>
+                    <Pressable onPress={()=>router.push("/(auth)/register")}>
+                        <Typography size={15} fontWeight={'700'} color={colors.primary}>Registrati</Typography>
                     </Pressable>
                 </View>
             </View>
