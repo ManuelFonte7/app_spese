@@ -4,6 +4,7 @@ import Input from "@/components/input";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
 import { colors, spacingX, spacingY } from "@/constants/tema";
+import { useAuth } from "@/contexts/authContexts";
 import { scalaVerticale } from "@/utils/stile";
 import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
@@ -12,19 +13,23 @@ import { Alert, Pressable, StyleSheet, View } from "react-native";
 const Register = () => {
     const emailRef = useRef("");
     const passwordRef = useRef("");
-    const usernameRef = useRef("");
+    const nameRef = useRef("");
     const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter()
+    const router = useRouter();
+    const {register: registerUser} = useAuth();
 
     const handleSubmit = async () =>{
-        if(!emailRef.current || !passwordRef.current || usernameRef.current){
+        if(!emailRef.current || !passwordRef.current || !nameRef.current){
             Alert.alert('Registrazione', "Per favore, completa tutti i campi");
             ReadableByteStreamController;
         }
-        console.log('email: ', emailRef.current);
-        console.log('username: ', usernameRef.current);
-        console.log('password: ', passwordRef.current);
-        console.log('Puoi procedere');
+        setIsLoading(true);
+        const res = await registerUser(emailRef.current, passwordRef.current, nameRef.current);
+        setIsLoading(false);
+        console.log('register result: ', res);
+        if(!res.success){
+            Alert.alert('Sign up', res.msg);
+        }
     };
 
     return(
@@ -39,7 +44,7 @@ const Register = () => {
                 <View style={styles.form}>
                     <Typography size={16} color={colors.textLighter}>Registrati ora per tracciare le tue spese</Typography>
                     <Input 
-                        onChangeText={value => usernameRef.current = value}
+                        onChangeText={value => nameRef.current = value}
                         placeholder="Inserisci il tuo username" 
                     />
                     <Input 
