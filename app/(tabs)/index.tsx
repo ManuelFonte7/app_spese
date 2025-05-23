@@ -1,22 +1,24 @@
 import Button from "@/components/Button";
+import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
 import { auth } from "@/config/firebase";
+import { useAuth } from "@/contexts/authContexts";
 import { signOut } from "firebase/auth";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 const Home = () => {
+    const {user} = useAuth();
 
     const handleLogout = async ()=>{
         await signOut(auth);
     };
     return(
-        <View>
-            <Text>Home</Text>
+        <ScreenWrapper>
             <Button onPress={handleLogout}>
                 <Typography>Esci</Typography>
             </Button>
-        </View>
+        </ScreenWrapper>
     );
 };
 
