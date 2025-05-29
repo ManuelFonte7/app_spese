@@ -1,14 +1,88 @@
-import ScreenWrapper from '@/components/ScreenWrapper';
+import BackButton from '@/components/BackButton';
+import Button from '@/components/Button';
+import Header from '@/components/Header';
+import Input from '@/components/input';
+import ModalWrapper from '@/components/ModalWrapper';
+import Typography from '@/components/Typography';
 import { colors, spacingX, spacingY } from '@/constants/tema';
+import { useAuth } from '@/contexts/authContexts';
+import { getProfileImage } from '@/services/ImageService';
+import { updateUser } from '@/services/userService';
+import { UserDataType } from '@/types';
 import { scala, scalaVerticale } from '@/utils/stile';
-import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { Image } from 'expo-image';
+import * as ImagePicker from 'expo-image-picker';
+import { useRouter } from 'expo-router';
+import * as Icons from 'phosphor-react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 const ProfileModal = () => {
+    const {user, updateUserData} = useAuth();
+    const [userData, setUserData] = useState<UserDataType>({name: '', image: null});
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+
+    const onPickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      //allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.5,
+    });
+
+    if (!result.canceled) {
+      setUserData({...userData, image: result.assets[0]});
+    }
+    }
+
+    useEffect(()=>{
+        setUserData({
+            name: user?.name || "",
+            image: user?.image || null
+        });
+    }, [user])
+    const onSubmit = async () =>{
+        let {name, image} = userData;
+        if(!name.trim()){
+            Alert.alert("User", "Completa tutti i campi");
+            return;
+        }
+
+        setLoading(true);
+        const res = await updateUser(user?.uid as string, userData);
+        setLoading(false);
+        if(res.success){
+            updateUserData(user?.uid as string);
+            router.back(); 
+        }else {
+            Alert.alert("User", res.msg);
+        }
+    };
     return(
-        <ScreenWrapper>
-            <Text>ProfileModal</Text>
-        </ScreenWrapper>
+        <ModalWrapper>
+            <View style={styles.container}>
+                <Header title="Modifica profilo" leftIcon={<BackButton />} style={{paddingBottom: spacingY._10}}/>
+
+                <ScrollView contentContainerStyle={styles.form}>
+                    <View style={styles.avatarContainer}>
+                        <Image style={styles.avatar} source={getProfileImage(userData.image)} contentFit='cover' transition={100}/>
+                        <TouchableOpacity onPress={onPickImage} style={styles.editIcon}>
+                            <Icons.Pencil size={scalaVerticale(20)} color={colors.neutral800} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Typography color={colors.neutral200}>Nome</Typography>
+                        <Input placeholder='Inserisci un nuovo nome' value={userData.name} onChangeText={value => setUserData({...userData, name: value})} />
+                    </View>
+                </ScrollView>
+            </View>
+            <View style={styles.footer}>
+                <Button onPress={onSubmit} loading={loading} style={{flex: 1}}>
+                    <Typography fontWeight={"700"}>Modifica</Typography>
+                </Button>
+            </View>
+        </ModalWrapper>
     )
 }
 

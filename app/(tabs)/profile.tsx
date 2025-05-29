@@ -20,13 +20,13 @@ const Profile = () => {
     const router = useRouter();
     const accountOptions : accountOptionType[] = [
         {
-            title: "Edit profile",
+            title: "Modifica profilo",
             icon: <Icons.User size={26} color={colors.white} weight="fill" />,
             routeName: '/(modals)/profileModal',
             bgColor: '#6366f1',
         },
         {
-            title: "Settings",
+            title: "Impostazioni",
             icon: <Icons.GearSix size={26} color={colors.white} weight="fill" />,
             //routeName: '/(modals)/profileModal',
             bgColor: '#059669',
